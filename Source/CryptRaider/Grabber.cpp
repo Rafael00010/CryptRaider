@@ -5,6 +5,7 @@
 
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -22,7 +23,16 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	UPhysicsHandleComponent* PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+
+	if (PhysicsHandle != nullptr)
+	{
+		UE_LOG(LogTemp, Display, TEXT("Component Name : %s"), *PhysicsHandle->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("No PhysicsHandle component on this actor!"));
+	}
 	
 }
 
@@ -32,6 +42,16 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Display, TEXT("Released grabber!"));
+}
+
+void UGrabber::Grab()
+{
 	FVector Start = GetComponentLocation();
 	FVector End = Start + GetForwardVector() * MaxGrabDistance;
 
